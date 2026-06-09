@@ -45,13 +45,14 @@ jobs:
 
       - name: Prepare Release Folder & Deploy
         run: |
-          mkdir -p weather_app/data
+          mkdir -p weather_app
           cp build/weather_app.exe weather_app/
 
+          # и копируем ПРЯМО в корень weather_app/, где лежит exe-файл
           if [ -f "data/cities.db" ]; then
-            cp data/cities.db weather_app/data/
+            cp data/cities.db weather_app/
           else
-            echo "Ошибка: data/cities.db не найден"
+            echo "Ошибка: data/cities.db не найден в репозитории"
             exit 1
           fi
 
