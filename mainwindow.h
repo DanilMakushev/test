@@ -116,5 +116,4 @@ private:
 
     // Флаги
     bool _wasInternetAvailable = true; // Хранит статус интернета на предыдущем шаге
-    bool _isFirstDataRequest = true; // Первый ли это запрос данных после запуска
 };
