@@ -1,9 +1,9 @@
 #include "mainwindow.h"
-#include "build/mainwindow_test_autogen/include/ui_mainwindow.h"
 #include "ui_mainwindow.h"
 #include <cmath>
 #include "forecastdata.h"
 #include "weatherchart.h"
+#include <QAbstractItemView>
 
 
 // ==========================================
@@ -132,7 +132,6 @@ void MainWindow::InitDatabase() {
     _dbManager = new DatabaseManager(DB_NAME, this);
 
     QSqlQueryModel* cityModel = _dbManager->GetCitiesModel();
-
     auto* completer = new QCompleter(cityModel, this);
     completer->setCompletionMode(QCompleter::PopupCompletion);
     completer->setCaseSensitivity(Qt::CaseInsensitive);
@@ -506,9 +505,8 @@ void MainWindow::ShowTodayWeather(bool isNewData) {
         NoInternet();
     }
 
-    if(_isFirstDataRequest){
+    if (_ui->stackedWidget->currentIndex() == 0) {
         _ui->stackedWidget->setCurrentIndex(2);
-        _isFirstDataRequest = false;
     }
     _ui->backButton->show();
     _ui->lineEditCityName->clear();
@@ -672,12 +670,10 @@ void MainWindow::OnTimerCheckInternetTick(){
 void MainWindow::SetStyle(const QString& theme) {
     if (theme == "dark") {
         this->setStyleSheet(R"(
-            /* Основной фон */
             QMainWindow, #centralwidget {
                 background-color: rgb(44, 44, 44);
             }
 
-            /* Текст */
             QLabel {
                 background-color: transparent;
                 color: #e0e0e0;
@@ -688,7 +684,6 @@ void MainWindow::SetStyle(const QString& theme) {
                 font-weight: bold;
             }
 
-            /* Поля ввода */
             QLineEdit#lineEditCityName, QLineEdit#apiKeyLineEdit {
                 background-color: #3a3a3a;
                 color: #ffffff;
@@ -698,65 +693,30 @@ void MainWindow::SetStyle(const QString& theme) {
                 padding: 0px 10px;
             }
 
-            QLineEdit#lineEditCityName:focus, QLineEdit#apiKeyLineEdit:focus {
+            QLineEdit#lineEditCityName, QLineEdit#apiKeyLineEdit:focus {
                 border: 1px solid #00a8ff;
             }
 
-            /* Всплывающий список автодополнения городов (QCompleter Popup) */
-            QAbstractItemView, QListView {
-                background-color: #323232;
-                color: #ffffff;
-                border: 1px solid #555555;
-                border-radius: 6px;
-                selection-background-color: #00a8ff;
-                selection-color: #ffffff;
-            }
-
-            /* Кнопки (Обычные и Навигационные ToolButton) */
-            QPushButton, QToolButton, #toForecastButton, #BackToMainButton {
+            QPushButton {
                 background-color: #3a3a3a;
                 color: #ffffff;
                 border: 1px solid #555555;
                 border-radius: 6px;
-                padding: 4px 12px;
             }
 
-            QPushButton:hover, QToolButton:hover, #toForecastButton:hover, #BackToMainButton:hover {
+            QPushButton:hover {
                 background-color: #4a4a4a;
                 border: 1px solid #00a8ff;
             }
 
-            QPushButton:pressed, QToolButton:pressed, #toForecastButton:pressed, #BackToMainButton:pressed {
+            QPushButton:pressed {
                 background-color: #2b2b2b;
             }
 
-            /* Радиокнопки (darkRadioButton и lightRadioButton) - Векторная отрисовка без мыла */
-            QRadioButton#darkRadioButton, QRadioButton#lightRadioButton {
-                color: #ffffff;
-                padding: 4px;
+            QRadioButton {
+                color: #fff;
             }
 
-            QRadioButton#darkRadioButton::indicator, QRadioButton#lightRadioButton::indicator {
-                width: 14px;
-                height: 14px;
-                border-radius: 8px; /* Превращаем квадрат в круг */
-                border: 2px solid #777777;
-                background-color: #3a3a3a;
-            }
-
-            QRadioButton#darkRadioButton::indicator:hover, QRadioButton#lightRadioButton::indicator:hover {
-                border: 2px solid #00a8ff;
-            }
-
-            QRadioButton#darkRadioButton::indicator:checked, QRadioButton#lightRadioButton::indicator:checked {
-                border: 2px solid #00a8ff;
-                /* Рисуем точку внутри с помощью резкого радиального градиента */
-                background-color: qradialgradient(cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, 
-                                                stop:0 #00a8ff, stop:0.5 #00a8ff, 
-                                                stop:0.6 #3a3a3a, stop:1 #3a3a3a);
-            }
-
-            /* Frame */
             #suggestFrame, #weatherTodayFrame, #forecastFrame, #detailFrame, #detailDateFrame, #frame {
                 background-color: #323232;
                 border: 1px solid #444444;
@@ -771,85 +731,65 @@ void MainWindow::SetStyle(const QString& theme) {
     }
     else {
         this->setStyleSheet(R"(
-            /* Основной фон */
             QMainWindow, #stackedWidget {
                 background-color: #a8a8a8;
             }
 
-            /* Текст */
             QLabel {
                 background-color: transparent;
-                color: #000000;
+                color: #000;
             }
 
             #tempLabel {
-                color: #000000;
+                color: #000;
                 font-weight: bold;
             }
 
-            /* Поля ввода */
             QLineEdit#lineEditCityName, QLineEdit#apiKeyLineEdit {
                 background-color: #979797;
-                color: #000000;
+                color: #000;
                 placeholder-text-color: #1a1a1a;
                 border: 1px solid #555555;
                 border-radius: 8px;
                 padding: 0px 10px;
             }
 
-            /* Всплывающий список автодополнения городов (Светлая тема) */
-            QAbstractItemView, QListView {
-                background-color: #ffffff;
-                color: #000000;
-                border: 1px solid #777777;
-                selection-background-color: #00a8ff;
-                selection-color: #ffffff;
-            }
-
-            /* Кнопки */
-            QPushButton, QToolButton, #toForecastButton, #BackToMainButton {
+            QPushButton {
                 background-color: #979797;
                 color: #000000;
                 border: 1px solid #555555;
                 border-radius: 6px;
-                padding: 4px 12px;
             }
 
-            QPushButton:hover, QToolButton:hover, #toForecastButton:hover, #BackToMainButton:hover {
+            QToolButton {
+                background-color: #979797;
+                color: #000000;
+                border: 1px solid #555555;
+                border-radius: 6px;
+            }
+
+            QPushButton:hover {
                 background-color: #757575;
                 border: 1px solid #00a8ff;
             }
 
-            QPushButton:pressed, QToolButton:pressed, #toForecastButton:pressed, #BackToMainButton:pressed {
+            QToolButton:hover {
+                background-color: #757575;
+                border: 1px solid #00a8ff;
+            }
+
+            QPushButton:pressed {
                 background-color: #595959;
             }
 
-            /* Радиокнопки (Светлая тема) */
-            QRadioButton#darkRadioButton, QRadioButton#lightRadioButton {
+            QToolButton:pressed {
+                background-color: #595959;
+            }
+
+            QRadioButton {
                 color: #000000;
-                padding: 4px;
             }
 
-            QRadioButton#darkRadioButton::indicator, QRadioButton#lightRadioButton::indicator {
-                width: 14px;
-                height: 14px;
-                border-radius: 8px;
-                border: 2px solid #555555;
-                background-color: #ffffff;
-            }
-
-            QRadioButton#darkRadioButton::indicator:hover, QRadioButton#lightRadioButton::indicator:hover {
-                border: 2px solid #00a8ff;
-            }
-
-            QRadioButton#darkRadioButton::indicator:checked, QRadioButton#lightRadioButton::indicator:checked {
-                border: 2px solid #00a8ff;
-                background-color: qradialgradient(cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, 
-                                                stop:0 #00a8ff, stop:0.5 #00a8ff, 
-                                                stop:0.6 #ffffff, stop:1 #ffffff);
-            }
-
-            /* Frame */
             #suggestFrame, #weatherTodayFrame, #forecastFrame, #detailFrame, #detailDateFrame, #frame {
                 background-color: #979797;
                 border: 1px solid #444444;
@@ -861,5 +801,39 @@ void MainWindow::SetStyle(const QString& theme) {
                 border: none;
             }
         )");
+    }
+
+    if (QCompleter* completer = _ui->lineEditCityName->completer()) {
+        if (QAbstractItemView* popup = completer->popup()) {
+            if (theme == "dark") {
+                popup->setStyleSheet(R"(
+                    QAbstractItemView {
+                        background-color: #4e4e4e;
+                        color: #ffffff;
+                        border: 1px solid #555555;
+                        border-radius: 6px;
+                        selection-background-color: #00a8ff;
+                        selection-color: #ffffff;
+                    }
+                    QAbstractItemView::item {
+                        padding: 6px 10px;
+                    }
+                )");
+            } else {
+                popup->setStyleSheet(R"(
+                    QAbstractItemView {
+                        background-color: #757575;
+                        color: #000000;
+                        border: 1px solid #555555;
+                        border-radius: 6px;
+                        selection-background-color: #00a8ff;
+                        selection-color: #ffffff;
+                    }
+                    QAbstractItemView::item {
+                        padding: 6px 10px;
+                    }
+                )");
+            }
+        }
     }
 }
