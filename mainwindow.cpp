@@ -670,10 +670,11 @@ void MainWindow::OnTimerCheckInternetTick(){
 void MainWindow::SetStyle(const QString& theme) {
     if (theme == "dark") {
         this->setStyleSheet(R"(
-            QMainWindow, #centralwidget {
+            MainWindow, QMainWindow, #centralwidget, #centralWidget, #stackedWidget {
                 background-color: rgb(44, 44, 44);
             }
 
+            /* Текст */
             QLabel {
                 background-color: transparent;
                 color: #e0e0e0;
@@ -693,28 +694,49 @@ void MainWindow::SetStyle(const QString& theme) {
                 padding: 0px 10px;
             }
 
-            QLineEdit#lineEditCityName, QLineEdit#apiKeyLineEdit:focus {
+            QLineEdit#lineEditCityName:focus, QLineEdit#apiKeyLineEdit:focus {
                 border: 1px solid #00a8ff;
             }
 
-            QPushButton {
+            QPushButton, QToolButton {
                 background-color: #3a3a3a;
                 color: #ffffff;
                 border: 1px solid #555555;
                 border-radius: 6px;
+                padding: 4px 12px;
             }
 
-            QPushButton:hover {
+            QPushButton:hover, QToolButton:hover {
                 background-color: #4a4a4a;
                 border: 1px solid #00a8ff;
             }
 
-            QPushButton:pressed {
+            QPushButton:pressed, QToolButton:pressed {
                 background-color: #2b2b2b;
             }
 
             QRadioButton {
-                color: #fff;
+                color: #ffffff;
+                padding: 4px;
+            }
+
+            QRadioButton::indicator {
+                width: 14px;
+                height: 14px;
+                border-radius: 8px;
+                border: 2px solid #777777;
+                background-color: #3a3a3a;
+            }
+
+            QRadioButton::indicator:hover {
+                border: 2px solid #00a8ff;
+            }
+
+            QRadioButton::indicator:checked {
+                border: 2px solid #00a8ff;
+                background-color: qradialgradient(cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5,
+                                                stop:0 #00a8ff, stop:0.5 #00a8ff,
+                                                stop:0.6 #3a3a3a, stop:1 #3a3a3a);
             }
 
             #suggestFrame, #weatherTodayFrame, #forecastFrame, #detailFrame, #detailDateFrame, #frame {
@@ -731,63 +753,68 @@ void MainWindow::SetStyle(const QString& theme) {
     }
     else {
         this->setStyleSheet(R"(
-            QMainWindow, #stackedWidget {
+            MainWindow, QMainWindow, #centralwidget, #centralWidget, #stackedWidget {
                 background-color: #a8a8a8;
             }
 
             QLabel {
                 background-color: transparent;
-                color: #000;
+                color: #000000;
             }
 
             #tempLabel {
-                color: #000;
+                color: #000000;
                 font-weight: bold;
             }
 
             QLineEdit#lineEditCityName, QLineEdit#apiKeyLineEdit {
                 background-color: #979797;
-                color: #000;
+                color: #000000;
                 placeholder-text-color: #1a1a1a;
                 border: 1px solid #555555;
                 border-radius: 8px;
                 padding: 0px 10px;
             }
 
-            QPushButton {
+            QPushButton, QToolButton {
                 background-color: #979797;
                 color: #000000;
                 border: 1px solid #555555;
                 border-radius: 6px;
+                padding: 4px 12px;
             }
 
-            QToolButton {
-                background-color: #979797;
-                color: #000000;
-                border: 1px solid #555555;
-                border-radius: 6px;
-            }
-
-            QPushButton:hover {
+            QPushButton:hover, QToolButton:hover {
                 background-color: #757575;
                 border: 1px solid #00a8ff;
             }
 
-            QToolButton:hover {
-                background-color: #757575;
-                border: 1px solid #00a8ff;
-            }
-
-            QPushButton:pressed {
-                background-color: #595959;
-            }
-
-            QToolButton:pressed {
+            QPushButton:pressed, QToolButton:pressed {
                 background-color: #595959;
             }
 
             QRadioButton {
                 color: #000000;
+                padding: 4px;
+            }
+
+            QRadioButton::indicator {
+                width: 14px;
+                height: 14px;
+                border-radius: 8px;
+                border: 2px solid #555555;
+                background-color: #ffffff;
+            }
+
+            QRadioButton::indicator:hover {
+                border: 2px solid #00a8ff;
+            }
+
+            QRadioButton::indicator:checked {
+                border: 2px solid #00a8ff;
+                background-color: qradialgradient(cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5,
+                                                stop:0 #00a8ff, stop:0.5 #00a8ff,
+                                                stop:0.6 #ffffff, stop:1 #ffffff);
             }
 
             #suggestFrame, #weatherTodayFrame, #forecastFrame, #detailFrame, #detailDateFrame, #frame {
@@ -808,7 +835,7 @@ void MainWindow::SetStyle(const QString& theme) {
             if (theme == "dark") {
                 popup->setStyleSheet(R"(
                     QAbstractItemView {
-                        background-color: #4e4e4e;
+                        background-color: #505050;
                         color: #ffffff;
                         border: 1px solid #555555;
                         border-radius: 6px;
@@ -822,7 +849,7 @@ void MainWindow::SetStyle(const QString& theme) {
             } else {
                 popup->setStyleSheet(R"(
                     QAbstractItemView {
-                        background-color: #757575;
+                        background-color: #7a7a7a;
                         color: #000000;
                         border: 1px solid #555555;
                         border-radius: 6px;
